@@ -1,0 +1,27 @@
+{
+  "name": "point-of-view",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "check:camera": "node scripts/check-camera.mjs",
+    "check:assets": "node scripts/check-western-assets.mjs",
+    "check:feedback": "node scripts/check-feedback.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/roboto-mono": "^5.3.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "motion": "^13.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}

@@ -1,0 +1,27 @@
+node_modules/
+dist/
+docs/
+.sites-runtime/
+*.tsbuildinfo
+
+# Local hosting and tool state
+.openai/
+.codex/
+.agents/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs and operating-system files
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini

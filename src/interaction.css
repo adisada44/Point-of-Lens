@@ -1,0 +1,83 @@
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --motion-press: 160ms;
+  --motion-disclosure: 200ms;
+  --motion-dialog: 250ms;
+}
+
+.disclosure-symbol { display: block; flex-shrink: 0; }
+details[open] > summary > .disclosure-symbol { transform: rotate(45deg); }
+.rail-fill { width: 100%; transform-origin: left center; }
+.dialog-head button { display: grid; place-items: center; }
+
+/* Native disclosure semantics remain usable when newer CSS is unavailable. */
+@supports (interpolate-size: allow-keywords) {
+  :is(.diagram-disclosure, .movement-disclosure)::details-content {
+    interpolate-size: allow-keywords;
+    height: 0;
+    opacity: 0;
+    overflow: clip;
+  }
+  :is(.diagram-disclosure, .movement-disclosure)[open]::details-content {
+    height: auto;
+    opacity: 1;
+  }
+  html[data-input-method="pointer"] :is(.diagram-disclosure, .movement-disclosure)::details-content {
+    transition: height var(--motion-disclosure) var(--ease-out),
+      opacity var(--motion-disclosure) var(--ease-out),
+      content-visibility var(--motion-disclosure) allow-discrete;
+  }
+}
+
+/* Native dialog keeps focus management and can reverse a quick close/reopen. */
+dialog { opacity: 0; transform: scale(.96); transform-origin: center; }
+dialog[open] { opacity: 1; transform: scale(1); }
+dialog::backdrop { opacity: 0; }
+dialog[open]::backdrop { opacity: 1; }
+html[data-input-method="pointer"] dialog {
+  transition: opacity var(--motion-dialog) var(--ease-out),
+    transform var(--motion-dialog) var(--ease-out),
+    display var(--motion-dialog) allow-discrete,
+    overlay var(--motion-dialog) allow-discrete;
+}
+html[data-input-method="pointer"] dialog::backdrop {
+  transition: opacity var(--motion-dialog) var(--ease-out),
+    display var(--motion-dialog) allow-discrete,
+    overlay var(--motion-dialog) allow-discrete;
+}
+@starting-style {
+  dialog[open] { opacity: 0; transform: scale(.96); }
+  dialog[open]::backdrop { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-input-method="pointer"] :is(.choice, .info-button, .text-button, .dialog-head button) {
+    transition: transform var(--motion-press) var(--ease-out);
+  }
+  html[data-input-method="pointer"] :is(.choice, .info-button, .text-button, .dialog-head button):active {
+    transform: scale(.97);
+  }
+  html[data-input-method="pointer"] .disclosure-symbol {
+    transition: transform var(--motion-disclosure) var(--ease-out);
+  }
+  html[data-input-method="pointer"] .rail-fill {
+    transition: transform var(--motion-press) var(--ease-out);
+  }
+  /* A rail tracks the pointer immediately; only clicking its labels eases. */
+  html[data-input-method="pointer"] .rail-track[data-dragging="true"] .rail-fill { transition: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; }
+  dialog, dialog[open] { transform: none; }
+  html[data-input-method="pointer"] dialog {
+    transition: opacity 120ms var(--ease-out), display 120ms allow-discrete, overlay 120ms allow-discrete;
+  }
+  html[data-input-method="pointer"] dialog::backdrop {
+    transition: opacity 120ms var(--ease-out), display 120ms allow-discrete, overlay 120ms allow-discrete;
+  }
+  html[data-input-method="pointer"] :is(.diagram-disclosure, .movement-disclosure)::details-content {
+    transition: opacity 120ms var(--ease-out), content-visibility 120ms allow-discrete;
+  }
+  @starting-style { dialog[open] { transform: none; } }
+}
